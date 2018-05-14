@@ -1,0 +1,14 @@
+{
+  "name": "sensorbase-gateway",
+  "version": "0.0.1",
+  "description": "Gateway for collecting data from Moteinos and storage in firebase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "serialport": "^6.2.0"
+  }
+}
