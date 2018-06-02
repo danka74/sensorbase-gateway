@@ -3,51 +3,65 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Sample FirebaseUI App</title>
-  <script src="https://www.gstatic.com/firebasejs/5.0.2/firebase.js"></script>
+  
+  <title>SensorBase Logon App</title>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <meta name="google-signin-client_id" content="950767124700-24qah058h6cg74a08aj4iab3p782lgu7.apps.googleusercontent.com">
+  <meta name="google-signin-cookiepolicy" content="single_host_origin">
+  <meta name="google-signin-scope" content="profile email">
+
+  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
   <script>
     // Initialize Firebase
     var config = {
-      apiKey: "AIzaSyB-kMwjUEGnEpY0tc4Asuwtdt2-VppJBSM",
-      authDomain: "sensorbase-4cc92.firebaseapp.com",
-      databaseURL: "https://sensorbase-4cc92.firebaseio.com",
-      projectId: "sensorbase-4cc92",
-      storageBucket: "sensorbase-4cc92.appspot.com",
-      messagingSenderId: "273859321172"
+      apiKey: "AIzaSyCPo7itLCg6M0d8M2ZuSJ0Z027RepjA7h0",
+      authDomain: "sensorbase-4d0cd.firebaseapp.com",
+      databaseURL: "https://sensorbase-4d0cd.firebaseio.com",
+      projectId: "sensorbase-4d0cd",
+      storageBucket: "sensorbase-4d0cd.appspot.com",
+      messagingSenderId: "950767124700"
     };
     firebase.initializeApp(config);
-  </script>
-  <script src="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.js"></script>
-  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.0.0/firebaseui.css" />
-  <script type="text/javascript">
-    // FirebaseUI config.
-    var uiConfig = {
-      signInSuccessUrl: 'login.html',
-      signInOptions: [
-        // Leave the lines as is for the providers you want to offer your users.
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-        // firebase.auth.TwitterAuthProvider.PROVIDER_ID,
-        // firebase.auth.GithubAuthProvider.PROVIDER_ID,
-        // firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        // firebase.auth.PhoneAuthProvider.PROVIDER_ID
-      ],
-      // Terms of service url.
-      tosUrl: '<your-tos-url>'
-    };
+  </script> 
 
-    // Initialize the FirebaseUI Widget using Firebase.
-    var ui = new firebaseui.auth.AuthUI(firebase.auth());
-    // The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig);
+  <script>
+  
+  function onSignIn(googleUser) {
+    console.log('Google Auth Response', googleUser);
+    // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+    var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
+      unsubscribe();
+      // Build Firebase credential with the Google ID token.
+      var credential = firebase.auth.GoogleAuthProvider.credential(
+          googleUser.getAuthResponse().id_token);
+
+      var httpReq = new XMLHttpRequest();
+      var url = "/auth";
+      httpReq.open("POST", url, true);
+      httpReq.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+      httpReq.send(JSON.stringify(credential));
+
+    });
+  }
+  
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+      var httpReq = new XMLHttpRequest();
+      var url = "/signout";
+      httpReq.open("GET", url, true);
+      httpReq.send();
+    });
+  }
+    
   </script>
+
 </head>
 
 <body>
-  <!-- The surrounding HTML is left untouched by FirebaseUI.
-         Your app may use that space for branding, controls and other customizations.-->
-  <h1>Welcome to My Awesome App</h1>
-  <div id="firebaseui-auth-container"></div>
-</body>
-
+  <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  <p>
+    <a href="#" onclick="signOut();">Sign out</a>
+  </p>
 </html>
