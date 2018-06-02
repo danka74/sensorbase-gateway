@@ -1,2 +1,4 @@
 node_modules
 config.js
+privkey.pem
+fullchain.pem

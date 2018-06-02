@@ -7,8 +7,8 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 const https = require('https');
-const privateKey  = fs.readFileSync('/etc/letsencrypt/live/violv383.dmhb.se/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/violv383.dmhb.se/fullchain.pem', 'utf8');
+const privateKey  = fs.readFileSync('privkey.pem', 'utf8');
+const certificate = fs.readFileSync('fullchain.pem', 'utf8');
 const credentials = {key: privateKey, cert: certificate};
 
 const firebase = require("firebase");
