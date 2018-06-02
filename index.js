@@ -32,11 +32,11 @@ parser.on("data", (data) => {
   if(useerId != null) {
     var sensorData = JSON.parse(data);
 
-    var battery = sensorData[0];
-    var temp = sensorData[1];
-    var hum = sensoorData[2];
-    var pres = sensorData[3];
-    var soil = sensorData[4];
+    var battery = sensorData.data[0];
+    var temp = sensorData.data[1];
+    var hum = sensoorData.data[2];
+    var pres = sensorData.data[3];
+    var soil = sensorData.data[4];
 
     var ref = firebase.database.collection("data/" + userId + "/data");
 
