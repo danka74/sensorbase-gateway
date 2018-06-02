@@ -29,6 +29,25 @@ const parser = port.pipe(new Readline({ delimiter: '\n' }));
 // Read data that is available but keep the stream from entering "flowing mode"
 parser.on("data", (data) => {
   console.log("Data: ", data);
+  if(useerId != null) {
+    var sensorData = JSON.parse(data);
+
+    var battery = sensorData[0];
+    var temp = sensorData[1];
+    var hum = sensoorData[2];
+    var pres = sensorData[3];
+    var soil = sensorData[4];
+
+    var ref = firebase.database.collection("data/" + userId + "/data");
+
+    ref.set({quantity: "tempC", value: temp, time: firebase.Timestamp.now()});
+    ref.set({quantity: "humPerc", value: hum, time: firebase.Timestamp.now()});
+    ref.set({quantity: "presHPa", value: pres, time: firebase.Timestamp.now()});
+    ref.set({quantity: "moistPerc", value: soil, time: firebase.Timestamp.now()});
+
+  } else {
+    console.log("Data received but not signed into Firebase");
+  }
 });
 
 app.post('/auth', (req, res) => {
