@@ -17,15 +17,18 @@ firebase.initializeApp(config);
 var useerId = null;
 
 const SerialPort = require("serialport");
+const Readline = require('@serialport/parser-readline')
 const serialportDevice = "/dev/ttyAMA0";
 const baudRate = 19200;
 var port = new SerialPort(serialportDevice, {
   baudRate: baudRate
 });
+const parser = port.pipe(new Readline({ delimiter: '\n' }));
+
 
 // Read data that is available but keep the stream from entering "flowing mode"
-port.on("readable", () => {
-  console.log("Data: ", port.read());
+parser.on("data", (data) => {
+  console.log("Data: ", data);
 });
 
 app.post('/auth', (req, res) => {
