@@ -2,3 +2,5 @@ node_modules
 config.js
 privkey.pem
 fullchain.pem
+package-lock.json
+*.save
